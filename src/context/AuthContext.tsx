@@ -32,12 +32,16 @@ const usuariosMock: Usuario[] = [
 ];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [usuario, setUsuario] = useState<Usuario | null>(() => {
+    const userSalvo = localStorage.getItem('usuario');
+    return userSalvo ? JSON.parse(userSalvo) : null;
+  });
 
   function login(email: string, senha: string) {
     const user = usuariosMock.find(u => u.email === email);
     if (user) {
       setUsuario(user);
+      localStorage.setItem('usuario', JSON.stringify(user)); // salvar no localStorage
       return true;
     }
     return false;
@@ -45,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function logout() {
     setUsuario(null);
+    localStorage.removeItem('usuario'); // limpar localStorage
   }
 
   return (

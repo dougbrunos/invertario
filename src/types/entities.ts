@@ -7,15 +7,6 @@ export interface Produto {
   fornecedorId: string;
 }
 
-export interface Produto {
-  id: string;
-  nome: string;
-  preco: number;
-  quantidade: number;
-  imagemUrl: string;
-  fornecedorId: string;
-}
-
 export interface Fornecedor {
   id: string;
   nome: string;
@@ -36,15 +27,13 @@ export interface Cliente {
 export interface Pedido {
   id: string;
   clienteId: string;
-  usuarioId: string;
-  status: 'Pendente' | 'Concluído';
-  dataCriacao: string;
+  data: string;
+  status: 'pendente' | 'finalizado' | 'cancelado';
+  itens: ItemPedido[];
   total: number;
 }
 
 export interface ItemPedido {
-  id: string;
-  pedidoId: string;
   produtoId: string;
   quantidade: number;
   precoUnitario: number;
@@ -52,11 +41,11 @@ export interface ItemPedido {
 
 export interface Transacao {
   id: string;
+  tipo: 'entrada' | 'saida';
   produtoId: string;
-  pedidoId?: string;
-  tipo: 'Entrada' | 'Saída';
-  valor: number;
+  quantidade: number;
   data: string;
+  pedidoId?: string;
 }
 
 export interface Usuario {

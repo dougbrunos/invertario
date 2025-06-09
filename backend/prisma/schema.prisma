@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Produto {
+  id         String       @id @default(uuid())
+  nome       String
+  preco      Float
+  estoque    Int
+  imagemUrl  String
+  ItemPedido ItemPedido[]
+}
+
+model Cliente {
+  id     String   @id @default(uuid())
+  nome   String
+  email  String
+  Pedido Pedido[]
+}
+
+model Pedido {
+  id        String   @id @default(uuid())
+  clienteId String
+  data      DateTime
+  status    String
+  total     Float
+
+  cliente Cliente      @relation(fields: [clienteId], references: [id])
+  itens   ItemPedido[]
+}
+
+model ItemPedido {
+  id            String @id @default(uuid())
+  pedidoId      String
+  produtoId     String
+  quantidade    Int
+  precoUnitario Float
+
+  pedido  Pedido  @relation(fields: [pedidoId], references: [id])
+  produto Produto @relation(fields: [produtoId], references: [id])
+}
